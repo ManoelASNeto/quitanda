@@ -6,12 +6,15 @@ import 'package:quitanda/src/pages/product/product_screen.dart';
 import 'package:quitanda/src/services/utils_services.dart';
 
 class ItemTile extends StatefulWidget {
-  const ItemTile({
+  final ItemModel itemModel;
+  final void Function(GlobalKey) cartAnimationMethod;
+  final GlobalKey imageGk = GlobalKey();
+
+  ItemTile({
     super.key,
     required this.itemModel,
+    required this.cartAnimationMethod,
   });
-
-  final ItemModel itemModel;
 
   @override
   State<ItemTile> createState() => _ItemTileState();
@@ -48,6 +51,7 @@ class _ItemTileState extends State<ItemTile> {
                       tag: widget.itemModel.imageUrl!,
                       child: Image.asset(
                         widget.itemModel.imageUrl!,
+                        key: widget.imageGk,
                       ),
                     ),
                   ),
@@ -87,7 +91,9 @@ class _ItemTileState extends State<ItemTile> {
           top: 4,
           right: 4,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              widget.cartAnimationMethod(widget.imageGk);
+            },
             child: Container(
               decoration: BoxDecoration(
                 color: CustomColors.customSwatchColor,

@@ -104,7 +104,7 @@ List<OrderModel> orders = [
       '2023-01-05 22:17:26.455',
     ),
     overdueDateTime: DateTime.parse(
-      '2023-01-05 23:17:26.455',
+      '2023-01-10 23:17:26.455',
     ),
     items: [
       CartItemModel(
@@ -122,7 +122,7 @@ List<OrderModel> orders = [
       '2023-01-05 22:17:26.455',
     ),
     overdueDateTime: DateTime.parse(
-      '2023-01-05 23:17:26.455',
+      '2023-01-10 23:17:26.455',
     ),
     items: [
       CartItemModel(
@@ -134,7 +134,7 @@ List<OrderModel> orders = [
         quantity: 5,
       )
     ],
-    status: 'refunded',
+    status: 'delivered',
     copyAndPaste: 'q1w2e3r4t5y7',
     total: 11.0,
   ),

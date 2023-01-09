@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quitanda/src/models/cart_item_model.dart';
 import 'package:quitanda/src/models/order_model.dart';
+import 'package:quitanda/src/pages/common_widgets/payment_dialog.dart';
 import 'package:quitanda/src/pages/orders/components/order_status_widget.dart';
 import 'package:quitanda/src/services/utils_services.dart';
 
@@ -23,6 +24,7 @@ class OrderTle extends StatelessWidget {
           dividerColor: Colors.transparent,
         ),
         child: ExpansionTile(
+          initiallyExpanded: orderModel.status == 'pending_payment',
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -38,22 +40,25 @@ class OrderTle extends StatelessWidget {
             ],
           ),
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: 150,
+            IntrinsicHeight(
               child: Row(
                 children: [
                   Expanded(
                     flex: 3,
-                    child: ListView(
-                      children: orderModel.items!.map(
-                        (orderItem) {
-                          return _OrderItemWidget(
-                            utilsServices: utilsServices,
-                            orderItem: orderItem,
-                          );
-                        },
-                      ).toList(),
+                    child: SizedBox(
+                      height: 150,
+                      child: ListView(
+                        children: orderModel.items!.map(
+                          (orderItem) {
+                            return _OrderItemWidget(
+                              utilsServices: utilsServices,
+                              orderItem: orderItem,
+                            );
+                          },
+                        ).toList(),
+                      ),
                     ),
                   ),
                   VerticalDivider(
@@ -70,6 +75,52 @@ class OrderTle extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+            Text.rich(
+              TextSpan(
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+                children: [
+                  const TextSpan(
+                    text: 'Total ',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: utilsServices.priceToCurrency(
+                      orderModel.total!,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: orderModel.status == 'pending_payment',
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      20,
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return PaymentDialog(
+                          order: orderModel,
+                        );
+                      });
+                },
+                icon: Image.network(
+                  'https://logospng.org/download/pix/logo-pix-icone-512.png',
+                  width: 18,
+                  height: 18,
+                  color: Colors.white,
+                ),
+                label: const Text('Ver QR code PIX'),
               ),
             ),
           ],
