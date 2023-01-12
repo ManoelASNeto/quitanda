@@ -18,9 +18,15 @@ class _CarTabState extends State<CarTab> {
   final UtilsServices utilsServices = UtilsServices();
 
   void removeItemFromCart(CartItemModel cartItemModel) {
-    setState(() {
-      app_data.cartItems.remove(cartItemModel);
-    });
+    setState(
+      () {
+        app_data.cartItems.remove(cartItemModel);
+        utilsServices.showToast(
+            message:
+                '${cartItemModel.itemModel.itemName!} removido(a) do carrinho ');
+        cartTotalPrice();
+      },
+    );
   }
 
   double cartTotalPrice() {
@@ -52,8 +58,9 @@ class _CarTabState extends State<CarTab> {
             Expanded(
               child: ListView.builder(
                 itemBuilder: (_, index) => CartTile(
-                    cartItemModel: app_data.cartItems[index],
-                    remove: removeItemFromCart),
+                  cartItemModel: app_data.cartItems[index],
+                  remove: removeItemFromCart,
+                ),
                 itemCount: app_data.cartItems.length,
               ),
             ),
@@ -101,12 +108,16 @@ class _CarTabState extends State<CarTab> {
                         bool? result = await showOrderConfirmation();
                         if (result ?? false) {
                           showDialog(
-                              context: context,
-                              builder: (_) {
-                                return PaymentDialog(
-                                  order: app_data.orders.first,
-                                );
-                              });
+                            context: context,
+                            builder: (_) {
+                              return PaymentDialog(
+                                order: app_data.orders.first,
+                              );
+                            },
+                          );
+                        } else {
+                          utilsServices.showToast(
+                              message: 'Pedido não confirmado', isError: true);
                         }
                       },
                       child: const Text(

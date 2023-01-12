@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quitanda/src/pages/splash/splash_screen.dart';
 
 import 'src/pages/auth/sign_in_screen.dart';
 
@@ -12,12 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Quitanda',
       theme: ThemeData(
         primarySwatch: Colors.green,
         scaffoldBackgroundColor: Colors.white.withAlpha(190),
       ),
-      home: const SignInScreen(),
+      home: const SplashScreen(),
     );
   }
 }

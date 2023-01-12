@@ -8,9 +8,8 @@ import 'package:quitanda/src/services/utils_services.dart';
 class ItemTile extends StatefulWidget {
   final ItemModel itemModel;
   final void Function(GlobalKey) cartAnimationMethod;
-  final GlobalKey imageGk = GlobalKey();
 
-  ItemTile({
+  const ItemTile({
     super.key,
     required this.itemModel,
     required this.cartAnimationMethod,
@@ -21,7 +20,11 @@ class ItemTile extends StatefulWidget {
 }
 
 class _ItemTileState extends State<ItemTile> {
+  final GlobalKey imageGk = GlobalKey();
+
   UtilsServices utilsServices = UtilsServices();
+
+  IconData tileIcon = MdiIcons.cartPlus;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,7 @@ class _ItemTileState extends State<ItemTile> {
                       tag: widget.itemModel.imageUrl!,
                       child: Image.asset(
                         widget.itemModel.imageUrl!,
-                        key: widget.imageGk,
+                        key: imageGk,
                       ),
                     ),
                   ),
@@ -90,29 +93,44 @@ class _ItemTileState extends State<ItemTile> {
         Positioned(
           top: 4,
           right: 4,
-          child: GestureDetector(
-            onTap: () {
-              widget.cartAnimationMethod(widget.imageGk);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: CustomColors.customSwatchColor,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  topRight: Radius.circular(20),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              topRight: Radius.circular(20),
+            ),
+            child: Material(
+              child: InkWell(
+                onTap: () {
+                  widget.cartAnimationMethod(imageGk);
+                  switchIcon();
+                },
+                child: Ink(
+                  decoration: BoxDecoration(
+                    color: CustomColors.customSwatchColor,
+                  ),
+                  height: 40,
+                  width: 35,
+                  child: Icon(
+                    tileIcon,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
-              ),
-              height: 40,
-              width: 35,
-              child: const Icon(
-                MdiIcons.cartPlus,
-                color: Colors.white,
-                size: 20,
               ),
             ),
           ),
         ),
       ],
     );
+  }
+
+  Future<void> switchIcon() async {
+    setState(() => tileIcon = MdiIcons.checkAll);
+
+    await Future.delayed(
+      const Duration(milliseconds: 1500),
+    );
+
+    setState(() => MdiIcons.cartPlus);
   }
 }

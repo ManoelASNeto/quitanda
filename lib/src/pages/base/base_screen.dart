@@ -114,8 +114,13 @@ class _BaseScreenState extends State<BaseScreen> {
         onItemSelected: (index) => setState(
           () {
             _currentIndex = index;
-            _pageController.jumpToPage(
+            // _pageController.jumpToPage(
+            //   index,
+            // );
+            _pageController.animateToPage(
               index,
+              duration: const Duration(microseconds: 800),
+              curve: Curves.linear,
             );
           },
         ),
